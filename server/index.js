@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser')
 const { MongoClient, ServerApiVersion } = require('mongodb')
 const jwt = require('jsonwebtoken')
 const morgan = require('morgan')
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 5000
 
 // middleware
 const corsOptions = {
@@ -41,20 +41,26 @@ const client = new MongoClient(process.env.DB_URI, {
     deprecationErrors: true,
   },
 })
+
+// users collection
+const usersCollection = client.db("stayBista").collection("users");
+
+
 async function run() {
   try {
+
     // auth related api
     app.post('/jwt', async (req, res) => {
       const user = req.body
-      console.log('I need a new jwt', user)
+      console.log(user);
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '365d',
+        expiresIn: '30d',
       })
       res
         .cookie('token', token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+          secure: process.env.NODE_ENV === 'production' || true,
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict' || "none",
         })
         .send({ success: true })
     })

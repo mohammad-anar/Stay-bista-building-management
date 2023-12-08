@@ -6,10 +6,15 @@ import { router } from './routes/Routes'
 import { Toaster } from 'react-hot-toast'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
+import { HelmetProvider } from 'react-helmet-async'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
+  <HelmetProvider>
   <AuthProvider>
     <Toaster />
+    <div className='max-w-7xl mx-auto'>
     <RouterProvider router={router} />
+    </div>
   </AuthProvider>
+  </HelmetProvider>
 )
